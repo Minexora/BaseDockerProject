@@ -9,7 +9,7 @@ Projenin yapılış amacı doğrudan docker yapısının entegrasyonunun sağlan
  
 ## Kurulum
 1. Docker kurulmalıdır. [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/) adresinde söylenildiği gibi kurulmalıdır.
-2.Docker containerların oluşup çalışması için aşağıdaki kod yazılır.
+2. Docker containerların oluşup çalışması için aşağıdaki kod yazılır.
     ```bash
     docker-compose up -d
     ```
