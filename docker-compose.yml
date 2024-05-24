@@ -1,0 +1,56 @@
+version: '3'
+
+volumes:
+  static_volume: {} 
+  mongo_volume: {}
+
+networks:
+  app-network: 
+    driver: bridge
+
+services:
+  db:
+    container_name: mongoDB
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - mongo_volume:/data/db
+      - ./initDB/init-db.js:/docker-entrypoint-initdb.d/init-db.js
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    networks:
+      - app-network
+
+  web:
+    container_name: web
+    build: .
+    command: python main.py
+    restart: always
+    volumes:
+      - ./src/:/code
+      - static_volume:/code/public
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    networks:
+      - app-network
+
+
+  # nginx:
+  #   build: ./nginx
+  #   restart: always
+  #   volumes:
+  #     - static_volume:/code/static
+  #   depends_on:
+  #     - web
+  #   ports:
+  #     - 1337:80
